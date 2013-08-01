@@ -156,7 +156,7 @@ module roach_infrastructure #(
 //  );
 
   BUFG bufg_sys_clk2x[3:0](
-    .I({sys_clk2x_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
+    .I({clk_200_mmcm, sys_clk2x90_mmcm, sys_clk2x180_mmcm, sys_clk2x270_mmcm}),
     .O({sys_clk2x,      sys_clk2x90     , sys_clk2x180     , sys_clk2x270})
   );
   

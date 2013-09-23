@@ -230,8 +230,8 @@ ddr3_async_tx_fifo ddr3_async_tx_fifo_inst (
 
 //Clock data into the RX FIFO with ddr3_app_clk
 
-reg [287:0]	din_rx_fifo_reg;
-reg		wr_en_rx_fifo_reg;
+reg [287:0]	din_rx_fifo_reg[1:0];
+reg [1:0]	wr_en_rx_fifo_reg;
 reg [1:0]	ui_rd_valid_reg;
 
 wire [287:0]	din_rx_fifo;
@@ -239,16 +239,17 @@ wire		wr_en_rx_fifo;
 wire		empty_rx_fifo;
 
 always @(posedge ddr3_app_clk) begin
-din_rx_fifo_reg		<= app_rd_data;
-wr_en_rx_fifo_reg	<= app_rd_data_valid;
+din_rx_fifo_reg[0]	<= app_rd_data;
+din_rx_fifo_reg[1]	<= din_rx_fifo_reg[0];
+wr_en_rx_fifo_reg	<= {wr_en_rx_fifo_reg[0],app_rd_data_valid};
 end
 
 always @(posedge ui_app_clk) begin
 ui_rd_valid_reg		<= {ui_rd_valid_reg[0],~empty_rx_fifo};
 end
 
-assign din_rx_fifo	= din_rx_fifo_reg;
-assign wr_en_rx_fifo	= wr_en_rx_fifo_reg;
+assign din_rx_fifo	= din_rx_fifo_reg[1];
+assign wr_en_rx_fifo	= wr_en_rx_fifo_reg[1];
 assign ui_rd_valid	= &ui_rd_valid_reg;
 
 wire	full_rx_fifo;
